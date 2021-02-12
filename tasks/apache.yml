@@ -1,0 +1,28 @@
+---
+    
+- name: Restrict ServerTokens
+  notify: restart_apache
+  lineinfile:
+    path: /etc/apache2/conf-available/security.conf
+    regexp: '^ServerTokens'
+    line: ServerTokens Prod
+
+- name: Restrict ServerSignature
+  notify: restart_apache
+  lineinfile:
+    path: /etc/apache2/conf-available/security.conf
+    regexp: '^ServerSignature'
+    line: ServerSignature Off
+
+- name: Sandbox Apache
+  notify:
+    - reload_systemd
+    - restart_apache
+  template:
+    src: apache2_sandbox.j2
+    dest: /etc/systemd/system/apache2.service.d/sandbox.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+    

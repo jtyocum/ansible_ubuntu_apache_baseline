@@ -1,0 +1,28 @@
+---
+
+- name: Install ModSecurity CRS
+  notify: restart_apache
+  apt:
+    name: modsecurity-crs
+    state: present
+
+- name: Apply recommended configuration
+  notify: restart_apache
+  copy:
+    remote_src: yes
+    force: no
+    src: /etc/modsecurity/modsecurity.conf-recommended
+    dest: /etc/modsecurity/modsecurity.conf
+
+- name: Enable rule processing
+  notify: restart_apache
+  lineinfile:
+    path: /etc/modsecurity/modsecurity.conf
+    regexp: '^SecRuleEngine'
+    line: SecRuleEngine On
+
+- name: Enable mod_security2
+  notify: restart_apache
+  apache2_module:
+    state: present
+    name: security2

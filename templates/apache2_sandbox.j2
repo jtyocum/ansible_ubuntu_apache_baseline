@@ -1,0 +1,14 @@
+[Service]
+CapabilityBoundingSet=~CAP_SYS_ADMIN
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths={{ a2_sandbox_rw_path | default('/run /var/log /var/www /var/cache /tmp /var/tmp') }}
+PrivateDevices=yes
+ProtectClock=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+SystemCallFilter=~@clock @cpu-emulation @debug @obsolete @module @mount @raw-io @reboot @swap
+SystemCallErrorNumber=EPERM
